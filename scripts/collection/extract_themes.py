@@ -1,6 +1,11 @@
 import argparse
 import json
 
+import os
+AUTHOR_STORAGE_LOC = os.path.join(os.getcwd(), "authors")
+THEMES_STORAGE_LOC = os.path.join(os.getcwd(), "themes")
+
+
 def extract_themes(dictionary: dict):
     all_themes = []
     for item in dictionary["docs"]:
@@ -12,17 +17,16 @@ def extract_themes(dictionary: dict):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("author_json_path")
-    parser.add_argument("output_path")
+    parser.add_argument("author_name")
 
     args = parser.parse_args()
 
-    with open(args.author_json_path, "r") as json_data:
+    with open(os.path.join(AUTHOR_STORAGE_LOC, args.author_name + ".json"), "r") as json_data:
         data = json.load(json_data)
 
     all_themes = extract_themes(data)
 
-    with open(args.output_path, "w") as json_file:
+    with open(os.path.join(THEMES_STORAGE_LOC, args.author_name + ".json"), "w") as json_file:
         json.dump({"themes": all_themes}, json_file)
 
 if __name__ == "__main__":
